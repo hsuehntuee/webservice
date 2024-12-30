@@ -2,26 +2,25 @@
 const express = require('express');
 const { Client } = require('pg');
 const bodyParser = require('body-parser');
-const cors = require('cors');
 
 // 初始化 Express 應用
 const app = express();
+
+// 使用環境變數中的端口（雲端平台會提供這個端口）
 const port = process.env.PORT || 3000;
 
-// 配置 CORS（處理跨域請求）
-app.use(cors());
 
 // 解析 JSON 請求
 app.use(bodyParser.json());
 
-// PostgreSQL 連接字串（請填寫您的資料庫 URL）
+// PostgreSQL 連接字串（請替換為您的資料庫連接 URL）
 const DB_URL = 'postgresql://test_zij7_user:cXCq0Km71u7ODlDgwYH94sXP0mVrMnJz@dpg-ctp93gij1k6c739h5nbg-a.oregon-postgres.render.com/test_zij7';
 
 // 創建 PostgreSQL 客戶端並連接到資料庫
 const client = new Client({
   connectionString: DB_URL,
   ssl: {
-    rejectUnauthorized: false,
+    rejectUnauthorized: false, // Render 需要 SSL 連接
   },
 });
 
