@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>調查系統</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .container {
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 500px;
+    }
+    h2 {
+      text-align: center;
+      color: #333;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    label {
+      font-weight: bold;
+      color: #555;
+    }
+    input, select {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .submit-btn {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      width: 100%;
+    }
+    .submit-btn:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>調查系統</h2>
+    <form id="survey-form">
+      <div class="form-group">
+        <label for="name">姓名：</label>
+        <input type="text" id="name" name="name" placeholder="請輸入您的名字" required>
+      </div>
+
+      <div class="form-group">
+        <label for="date">日期：</label>
+        <select id="date" name="date">
+          <option value="2/14">2/14</option>
+          <option value="2/11">2/11</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="restaurant">選擇餐廳：</label>
+        <select id="restaurant" name="restaurant">
+          <option value="A">A 餐廳</option>
+          <option value="B">B 餐廳</option>
+          <option value="C">C 餐廳</option>
+          <option value="D">D 餐廳</option>
+          <option value="E">E 餐廳</option>
+        </select>
+      </div>
+
+      <button type="submit" class="submit-btn">提交調查</button>
+    </form>
+  </div>
+
+  <script>
+    // 表單提交事件
+    document.getElementById('survey-form').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      // 獲取表單數據
+      const name = document.getElementById('name').value;
+      const date = document.getElementById('date').value;
+      const restaurant = document.getElementById('restaurant').value;
+
+      // GitHub API 的 URL
+      const apiUrl = 'https://api.github.com/repos/your-username/your-repository/issues';
+      
+      // 請記得將這裡的 'your-github-token' 換成你的 GitHub Personal Access Token
+      const token = 'your-github-token';  
+
+      // 構建 Issue 的數據
+      const issueData = {
+        title: `New Survey Submission - ${name}`,
+        body: `Name: ${name}\nDate: ${date}\nRestaurant: ${restaurant}`,
+        labels: ['survey'],
+      };
+
+      // 使用 fetch 來提交數據
+      fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+          'Authorization': `token ${token}`,  // 使用 Personal Access Token 認證
+          'Content-Type': 'application/json',  // 設置為 JSON 格式
+        },
+        body: JSON.stringify(issueData),
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.id) {
+          alert('調查表單提交成功');
+        } else {
+          alert('提交失敗，請再試一次');
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('提交失敗');
+      });
+    });
+  </script>
+
+</body>
+</html>
